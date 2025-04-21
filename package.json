@@ -1,6 +1,6 @@
 {
   "name": "testcase-builder-ui-poc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Test Case Builder for IA Automation - POC",
   "scripts": {
     "dev": "npx @tailwindcss/cli -i ./src/css/input.css -o ./src/css/output.css --watch",

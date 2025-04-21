@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Case Builder</title>
+  <link href="./css/output.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Test Case Builder</h1>
+
+    <!-- Test Case Basics -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Test Case Header Information</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label for="testCaseName" class="block text-sm font-medium text-gray-700 mb-1">Test Case ID</label>
+          <input type="text" id="testCaseName"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="e.g. C8266">
+        </div>
+        <div>
+          <label for="suiteTitle" class="block text-sm font-medium text-gray-700 mb-1">Suite Title</label>
+          <input type="text" id="suiteTitle"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="e.g. Verify Partial Refund Export...">
+        </div>
+        <div>
+          <label for="suiteName" class="block text-sm font-medium text-gray-700 mb-1">Suite Name</label>
+          <input type="text" id="suiteName"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="e.g. Api_Suite1">
+        </div>
+      </div>
+      <div class="mt-4">
+        <label for="storeName" class="block text-sm font-medium text-gray-700 mb-1">Store Name</label>
+        <input type="text" id="storeName"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="e.g. store1">
+      </div>
+    </div>
+
+    <!-- Interactions Container -->
+    <div id="interactionsContainer">
+      <!-- Interactions will be added here dynamically -->
+    </div>
+
+    <button id="addInteractionBtn"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md mb-6">
+      <i class="fas fa-plus mr-2"></i>Add Interaction
+    </button>
+
+    <!-- JSON Preview -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold text-gray-700">JSON Preview</h2>
+        <div>
+          <button id="copyJsonBtn"
+            class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-3 rounded-md mr-2">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+          <!-- <button id="downloadJsonBtn"
+            class="bg-green-500 hover:bg-green-600 text-white font-medium py-1 px-3 rounded-md">
+            <i class="fas fa-download mr-1"></i>Download
+          </button> -->
+        </div>
+      </div>
+      <pre id="jsonPreview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto max-h-96" contenteditable="true"></pre>
+    </div>
+  </div>
+
+  <!-- Templates (hidden) -->
+  <template id="interactionTemplate">
+    <div class="interaction bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="interaction-name text-xl font-semibold text-gray-700">Interaction</h2>
+        <button class="removeInteractionBtn text-red-500 hover:text-red-700">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+      <div class="foldable">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Test Title</label>
+          <input type="text"
+            class="testTitle w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="e.g. C8266OrderImportOrderImport">
+        </div>
+
+        <div class="mb-4">
+          <h3 class="text-lg font-medium text-gray-700 mb-2">Pre-Request Steps</h3>
+          <div class="preRequestStepsContainer">
+            <!-- Pre-request steps will be added here -->
+          </div>
+          <button
+            class="addPreRequestStepBtn bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-3 rounded-md mt-2">
+            <i class="fas fa-plus mr-1"></i>Add Pre-Request Step
+          </button>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="text-lg font-medium text-gray-700 mb-2">Final Request/Response</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="finalRequest">
+              <h4 class="text-md font-medium text-gray-700 mb-2">Request</h4>
+              <div class="mb-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Method</label>
+                <select
+                  class="finalRequestMethod w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="GET">GET</option>
+                  <option value="POST" selected>POST</option>
+                  <option value="PUT">PUT</option>
+                  <option value="DELETE">DELETE</option>
+                </select>
+              </div>
+              <div class="mb-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Path</label>
+                <input type="text"
+                  class="finalRequestPath w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g. /connections/process.env[CONNECTIONS.NETSUITE]/proxy">
+              </div>
+            </div>
+
+            <div class="finalResponse">
+              <h4 class="text-md font-medium text-gray-700 mb-2">Response</h4>
+              <div class="mb-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <input type="number"
+                  class="finalResponseStatus w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value="200">
+              </div>
+              <div class="mb-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Time (ms)</label>
+                <input type="number"
+                  class="finalResponseTime w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value="10000">
+              </div>
+              <div class="mb-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Data Validation Method</label>
+                <input type="text"
+                  class="finalResponseValidationMethod w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g. validateSalesOrderWithDiscountItem">
+              </div>
+              <div class="mb-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Body Path</label>
+                <input type="text"
+                  class="finalResponseBodyPath w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g. /test-data/Api_Suite1/responses/...">
+              </div>
+              <div class="mb-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Unique Value</label>
+                <input type="text"
+                  class="finalResponseUniqueValue w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g. {{C8266shopifyOrderId}}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="preRequestStepTemplate">
+    <div class="preRequestStep bg-gray-50 rounded-md p-4 mb-4 border border-gray-200">
+      <div class="flex justify-between items-center mb-3">
+        <div class="flex items-center">
+          <h4 class="text-md font-medium text-gray-700">Step</h4>
+          <select
+            class="stepType ml-3 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="custom">Custom Step</option>
+            <option value="flowId">Get Flow ID</option>
+            <option value="integrationId">Get Integration ID</option>
+            <option value="updateFlowStatus">Update Flow Status</option>
+            <option value="updateSettings">Update Settings</option>
+            <option value="dataCreation">Data Creation</option>
+            <option value="flowValidation">Flow Validation</option>
+          </select>
+        </div>
+        <button class="removeStepBtn text-red-500 hover:text-red-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="stepRequest">
+          <h5 class="text-sm font-medium text-gray-700 mb-2">Request</h5>
+          <div class="mb-2">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Method</label>
+            <select
+              class="stepRequestMethod w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="PUT">PUT</option>
+              <option value="DELETE">DELETE</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Path</label>
+            <input type="text"
+              class="stepRequestPath w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. /flows">
+          </div>
+          <div class="mb-2 filterKeyContainer">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Filter Key</label>
+            <select
+              class="stepRequestFilterKey w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. name : Sync Shopify order on-demand to NetSuite (add)">
+              <option value="name : Sync Shopify order on-demand to NetSuite (add)">name : Sync Shopify order on-demand to NetSuite (add)</option>
+              <option value="name : Shopify order to NetSuite order (cash sale or sales order)">name : Shopify order to NetSuite order (cash sale or sales order)</option>
+              <option value="name : NetSuite fulfillment to Shopify fulfillment (add)">name : NetSuite fulfillment to Shopify fulfillment (add)</option>
+          </select>
+          </div>
+          <div class="mb-2 storeNameId">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Store Name</label>
+            <input type="text"
+              class="stepRequestFilterValue w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="store1">
+          </div>
+          <div class="mb-2 customVariableField">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Custom Variable field Name</label>
+            <input type="text"
+              class="stepRequestStoreVariable w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. store_C8266flowId">
+          </div>
+          <div class="mb-2 customVariableValue">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Custom Variable Value</label>
+            <input type="text"
+              class="stepRequestStoreValue w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. _id">
+          </div>
+          <div class="mb-2 settingsMethodContainer hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Settings Method</label>
+            <select
+              class="stepRequestSettingsMethod w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. updateflowStatusThroughAPI">
+              <option value="updateflowStatusThroughAPI">updateflowStatusThroughAPI</option>
+              <option value="updateSettings">updateSettings</option>
+            </select>
+          </div>
+          <div class="mb-2 payloadContainer hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Payload Path</label>
+            <input type="text"
+              class="stepRequestPayload w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. /test-data/Api_Suite1/payloads/...">
+          </div>
+          <div class="mb-2 dataCreationMethodContainer hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Data Creation Method</label>
+            <select type="text"
+              class="stepRequestDataCreationMethod w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. createSHPFDraftOrderthoughAPI">
+              <option value="createSHPFDraftOrderthoughAPI">createSHPFDraftOrderthoughAPI</option>
+              <option value="createProduct">createProduct</option>
+              <option value="createShopifyMarket">createShopifyMarket</option>
+              <option value="createShipmentforSHPFOrder">createShipmentforSHPFOrder</option>
+            </select>
+          </div>
+          <div class="mb-2 uniqueValueContainer hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Unique Value</label>
+            <input type="text"
+              class="stepRequestUniqueValue w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. PAID">
+          </div>
+          <div class="mb-2 secondaryValueContainer hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Secondary Value</label>
+            <input type="text"
+              class="stepRequestSecondaryValue w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. PAID">
+          </div>
+          <div class="mb-2 waitUntilContainer hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Wait Until</label>
+            <input type="text"
+              class="stepRequestWaitUntil w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. completed">
+          </div>
+        </div>
+
+        <div class="stepResponse hidden">
+          <h5 class="text-sm font-medium text-gray-700 mb-2">Response</h5>
+          <div class="mb-2">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Status</label>
+            <input type="number"
+              class="stepResponseStatus w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value="200">
+          </div>
+          <div class="mb-2 partialValidationContainer">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Partial Validation</label>
+            <select
+              class="stepResponsePartialValidation w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="false">false</option>
+              <option value="true">true</option>
+            </select>
+          </div>
+          <div class="mb-2 bodyPathContainer">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Body Path</label>
+            <input type="text"
+              class="stepResponseBodyPath w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. /test-data/Api_Suite1/responses/...">
+          </div>
+        </div>
+      </div>
+
+      <div class="addOnForPreRequest">
+        <!-- we can add settings/flow status/ data creation/ validation UI sections etc -->
+         
+      </div>
+      
+    </div>
+  </template>
+
+  <template id="flowStatusPaneTemplate">
+    <div class="bg-white rounded-lg shadow-md mb-8">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-700">Configure Order Flow's Status</h2>
+      </div>
+      <div class="p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Left Side: Flow Selection -->
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
+            <div class="flow-selector mb-4">
+              <div class="flow-header cursor-pointer flex justify-between items-center">
+                <h3 class="text-md font-medium text-gray-700">Order Flows</h3>
+                <i class="fas fa-chevron-down text-gray-500"></i>
+              </div>
+              <div class="flow-options mt-4 hidden">
+                <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
+                  <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                      <span class="text-sm font-medium text-gray-700">Sync Shopify order on-demand to NetSuite (add)</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="flow-toggle sr-only peer">
+                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                    </label>
+                  </div>
+                </div>
+                <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
+                  <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                      <span class="text-sm font-medium text-gray-700">Shopify order to NetSuite order (cash sale or sales order)</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="flow-toggle sr-only peer">
+                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                    </label>
+                  </div>
+                </div>
+                <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
+                  <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                      <span class="text-sm font-medium text-gray-700">Shopify customer to NetSuite customer (add or update)</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="flow-toggle sr-only peer">
+                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="flow-selector mb-4">
+              <div class="flow-header cursor-pointer flex justify-between items-center">
+                <h3 class="text-md font-medium text-gray-700">Order Flows</h3>
+                <i class="fas fa-chevron-down text-gray-500"></i>
+              </div>
+              <div class="flow-options mt-4 hidden">
+                <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
+                  <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                      <span class="text-sm font-medium text-gray-700">On-demand Flow</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="flow-toggle sr-only peer">
+                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                    </label>
+                  </div>
+                </div>
+                <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
+                  <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                      <span class="text-sm font-medium text-gray-700">Batch Flow</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="flow-toggle sr-only peer">
+                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                    </label>
+                  </div>
+                </div>
+                <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
+                  <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                      <span class="text-sm font-medium text-gray-700">Customer Flow</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="flow-toggle sr-only peer">
+                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+          
+          <!-- Right Side: JSON Preview -->
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
+            <h3 class="text-md font-medium text-gray-700 mb-3">JSON Preview</h3>
+            <pre id="flow-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm" contenteditable="true"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="settingsPaneTemplate">
+    <div class="bg-white rounded-lg shadow-md">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-700">Configure IA Settings</h2>
+      </div>
+      <div class="p-6">
+        <div class="settings-add-on grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Left Side: Tax Settings -->
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
+            <h3 class="text-md font-medium text-gray-700 mb-4">Sync sales tax to NetSuite</h3>
+            
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Select Option</label>
+              <select id="tax-option" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+              </select>
+            </div>
+            
+            <div class="mb-4">
+              <label class="flex items-center">
+                <input type="checkbox" id="per-line-taxes" class="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded mr-2">
+                <span class="text-sm font-medium text-gray-700">Per-line taxes on transaction enabled in NetSuite</span>
+              </label>
+            </div>
+            
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Default tax code or group when no match is found in NetSuite</label>
+              <input type="text" id="default-tax-code" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter default tax code">
+            </div>
+          </div>
+          
+          <!-- Right Side: JSON Preview -->
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
+            <h3 class="text-md font-medium text-gray-700 mb-3">JSON Preview</h3>
+            <pre id="tax-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm" contenteditable="true"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="shopifyDraftOrder">
+    <div class="bg-white rounded-lg shadow-md mb-8">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-700">Configure Order Flow's Status</h2>
+      </div>
+      <div class="p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+         
+          
+          <!-- Right Side: JSON Preview -->
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
+            <h3 class="text-md font-medium text-gray-700 mb-3">JSON Preview</h3>
+            <pre id="flow-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm" contenteditable="true"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="./scripts/main.js"></script>
+  <script src="./scripts/helper.js"></script>
+</body>
+
+</html>

@@ -582,29 +582,6 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTaxJson();
      }
     }
-    
-    
 
-
-  
-  //Not needed
-    // function downloadJson() {
-    //   const jsonText = document.getElementById("jsonPreview").textContent
-    //   const testCaseName = document.getElementById("testCaseName").value || "testcase"
-    //   const blob = new Blob([jsonText], { type: "application/json" })
-    //   const url = URL.createObjectURL(blob)
-  
-    //   const a = document.createElement("a")
-    //   a.href = url
-    //   a.download = `${testCaseName}.json`
-    //   document.body.appendChild(a)
-    //   a.click()
-  
-    //   // Cleanup
-    //   setTimeout(() => {
-    //     document.body.removeChild(a)
-    //     URL.revokeObjectURL(url)
-    //   }, 0)
-    // }
   })
   

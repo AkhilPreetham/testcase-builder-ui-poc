@@ -1,10 +1,10 @@
 import {copyJsonToClipboard} from './helper.js'
-import {createFunctionDetailsHandler} from "./details/shopifyIA/functionDetails.js"
+import {creationFunctionDetailsHandler, validationFunctionDetailsHandler} from "./details/shopifyIA/functionDetails.js"
 
 
 document.addEventListener("DOMContentLoaded", () => {
     // Global variables to store dynamic variables
-    let testCaseId, testCaseTitle, flowIdCounter, flowUpdateStatusCallCounter, updateSettingsCallCounter, dataCreationCounter, interactionCounter, flowIdCustomField;
+    let testCaseId, testCaseTitle, flowIdCounter, flowUpdateStatusCallCounter, updateSettingsCallCounter, dataCreationCounter, flowValidateResponseCounter, finalValidationCounter, interactionCounter, flowIdCustomField, suiteName;
     let testCaseName
     let addOnObj = {
       updateFlowStatus: "flowStatusPaneTemplate",
@@ -34,6 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
       updateSettingsCallCounter = 1
       interactionCounter = 1
       dataCreationCounter = 1
+      flowValidateResponseCounter = 1
+      finalValidationCounter = 1
       flowIdCustomField= []
       // Add first interaction by default
       addInteraction()
@@ -77,6 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Add first pre-request step by default
       addPreRequestStep(interaction.querySelector(".preRequestStepsContainer"))
   
+      //populate validation with proper steps
+      updateFinalSteps(interaction)
       // Update JSON preview
       updateJsonPreview()
       arrangeTheIntegrationOrder()
@@ -240,13 +244,17 @@ document.addEventListener("DOMContentLoaded", () => {
         case "flowValidation":
           methodSelect.value = "GET"
           testCaseName = document.getElementById("testCaseName").value || "C8266"
-          pathInput.value = `/flows/{{${testCaseName}flowId}}/jobs/latest`
+          pathInput.value = `/flows/{{${testCaseName}flowId1}}/jobs/latest`
           step.querySelector(".waitUntilContainer").classList.remove("hidden")
           step.querySelector(".customVariableField").classList.remove("hidden")
           step.querySelector(".customVariableValue").classList.remove("hidden")
           step.querySelector(".stepResponse").classList.remove("hidden")
           step.querySelector(".partialValidationContainer").classList.remove("hidden")
           step.querySelector(".bodyPathContainer").classList.remove("hidden")
+          step.querySelector(".stepResponse").querySelector(".uniqueValueContainer1").classList.add("hidden")
+          step.querySelector(".stepResponse").querySelector(".uniqueValueContainer2").classList.add("hidden")
+          step.querySelector(".stepResponse").querySelector(".uniqueValueContainer3").classList.add("hidden")
+          step.querySelector(".dataValidationMethodContainer").classList.add("hidden")
   
           // Set default values
           step.querySelector(".stepRequestWaitUntil").value = "completed"
@@ -257,7 +265,8 @@ document.addEventListener("DOMContentLoaded", () => {
           const sName = document.getElementById("suiteName").value || "Api_Suite1"
           const testT = step.closest(".interaction").querySelector(".testTitle").value || "OrderImportOrderImport"
           step.querySelector(".stepResponseBodyPath").value =
-            `/test-data/${sName}/responses/${testCaseName}/${testCaseName}flow_response.json`
+            `/test-data/${sName}/responses/${testCaseName}/${testCaseName}flowValidate_response${flowValidateResponseCounter}.json`
+          flowValidateResponseCounter++
           break
   
         case "custom":
@@ -283,6 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     function updateJsonPreview() {
       try {
+        suiteName = document.getElementById("suiteName").value
         const testCaseJson = buildTestCaseJson()
         document.getElementById("jsonPreview").textContent = JSON.stringify(testCaseJson, null, 2)
   
@@ -342,9 +352,17 @@ document.addEventListener("DOMContentLoaded", () => {
           finalResponse.body = bodyPath
         }
   
-        const uniqueValue = interactionEl.querySelector(".finalResponseUniqueValue").value
+        const uniqueValue = interactionEl.querySelector(".finalStepResponseUniqueValue1").value
         if (uniqueValue) {
           finalResponse.uniqueValue = uniqueValue
+        }
+        const secondaryValue = interactionEl.querySelector(".finalStepResponseUniqueValue2").value
+        if (secondaryValue) {
+          finalResponse.secondaryValue = secondaryValue
+        }
+        const tertiaryValue = interactionEl.querySelector(".finalStepResponseUniqueValue3").value
+        if (tertiaryValue) {
+          finalResponse.tertiaryValue = tertiaryValue
         }
   
         // Build the interaction object
@@ -607,7 +625,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
       const updateDetails = (step) => {
         const functionValue = step.querySelector(".stepRequestDataCreationMethod").value;
-        const details = createFunctionDetailsHandler[functionValue](testCaseName);
+        const details = creationFunctionDetailsHandler[functionValue](testCaseName);
     
         step.querySelector(".stepRequestPath").value = details.path;
     
@@ -624,7 +642,12 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     
       updateDetails(step);
-      step.querySelector(".stepRequestDataCreationMethod").addEventListener("change", updateDetails);
+      step.querySelector(".stepRequestDataCreationMethod").addEventListener("change", () => {
+        step.querySelectorAll(".uniqueValueContainer1").forEach((e) => e.classList.add("hidden"))
+        step.querySelectorAll(".uniqueValueContainer2").forEach((e) => e.classList.add("hidden"))
+        step.querySelectorAll(".uniqueValueContainer3").forEach((e) => e.classList.add("hidden"))
+        updateDetails(step)
+      });
     }
 
     function filterOptions(options, inputValue) {
@@ -705,6 +728,45 @@ document.addEventListener("DOMContentLoaded", () => {
     
       // Initial render of options
       renderOptions(options, optionsList, inputElement, dropdownElement)
+    }
+
+    function updateFinalSteps(interaction){
+      interaction.querySelector(".finalResponseBodyPath").value =
+            `/test-data/${suiteName}/responses/${testCaseName}/${testCaseName}finalValidation_response${finalValidationCounter}.json`
+      finalValidationCounter++
+      const templateClone = document.importNode(
+        document.getElementById("dataCreationTemplate").content,
+        true
+      );
+      const addOnContainer = interaction.querySelector(".addOnForFinalRequest");
+      addOnContainer.appendChild(templateClone);
+    
+      const updateDetails = (interaction) => {
+        const functionValue = interaction.querySelector(".finalResponseValidationMethod").value;
+        console.log("functionValue is ", functionValue)
+        const details = validationFunctionDetailsHandler[functionValue](testCaseName);
+    
+        interaction.querySelector(".finalRequestPath").value = details.path;
+    
+        Object.keys(details.uniqueValues).forEach((key, index) => {
+          const uniqueValueContainer = interaction.querySelector(`.uniqueValueFinalContainer${index + 1}`);
+          uniqueValueContainer.classList.remove("hidden");
+          uniqueValueContainer.querySelector(`.finalStepResponseUniqueValue${index + 1}`).placeholder = details.uniqueValues[key];
+        });
+    
+        addOnContainer.querySelector("#flow-json-preview").textContent = JSON.stringify(details.json, null, 2);
+        handleReusableOptions(addOnContainer, [...reusableOptions]);
+        reusableOptions.push(...details.mapFields);
+        handleMappedOptions(addOnContainer, [...details.mapFields]);
+      };
+    
+      updateDetails(interaction);
+      interaction.querySelector(".stepRequestDataCreationMethod").addEventListener("change", () => {
+        interaction.querySelectorAll(".uniqueValueContainer1").forEach((e) => e.classList.add("hidden"))
+        interaction.querySelectorAll(".uniqueValueContainer2").forEach((e) => e.classList.add("hidden"))
+        interaction.querySelectorAll(".uniqueValueContainer3").forEach((e) => e.classList.add("hidden"))
+        updateDetails(step)
+      });
     }
   })
   

@@ -69,7 +69,8 @@
           </button> -->
         </div>
       </div>
-      <pre id="jsonPreview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto max-h-96" contenteditable="true"></pre>
+      <pre id="jsonPreview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto max-h-96"
+        contenteditable="true"></pre>
     </div>
   </div>
 
@@ -208,10 +209,13 @@
             <select
               class="stepRequestFilterKey w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g. name : Sync Shopify order on-demand to NetSuite (add)">
-              <option value="name : Sync Shopify order on-demand to NetSuite (add)">name : Sync Shopify order on-demand to NetSuite (add)</option>
-              <option value="name : Shopify order to NetSuite order (cash sale or sales order)">name : Shopify order to NetSuite order (cash sale or sales order)</option>
-              <option value="name : NetSuite fulfillment to Shopify fulfillment (add)">name : NetSuite fulfillment to Shopify fulfillment (add)</option>
-          </select>
+              <option value="name : Sync Shopify order on-demand to NetSuite (add)">name : Sync Shopify order on-demand
+                to NetSuite (add)</option>
+              <option value="name : Shopify order to NetSuite order (cash sale or sales order)">name : Shopify order to
+                NetSuite order (cash sale or sales order)</option>
+              <option value="name : NetSuite fulfillment to Shopify fulfillment (add)">name : NetSuite fulfillment to
+                Shopify fulfillment (add)</option>
+            </select>
           </div>
           <div class="mb-2 storeNameId">
             <label class="block text-xs font-medium text-gray-700 mb-1">Store Name</label>
@@ -253,7 +257,6 @@
               placeholder="e.g. createSHPFDraftOrderthoughAPI">
               <option value="createSHPFDraftOrderthoughAPI">createSHPFDraftOrderthoughAPI</option>
               <option value="createProduct">createProduct</option>
-              <option value="createShopifyMarket">createShopifyMarket</option>
               <option value="createShipmentforSHPFOrder">createShipmentforSHPFOrder</option>
             </select>
           </div>
@@ -304,9 +307,9 @@
 
       <div class="addOnForPreRequest">
         <!-- we can add settings/flow status/ data creation/ validation UI sections etc -->
-         
+
       </div>
-      
+
     </div>
   </template>
 
@@ -328,91 +331,60 @@
                 <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
                   <div class="flex items-center justify-between">
                     <label class="flex items-center">
-                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Sync Shopify order on-demand to NetSuite (add)</span>
+                      <input type="checkbox"
+                        class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                      <span class="text-sm font-medium text-gray-700">Sync Shopify order on-demand to NetSuite
+                        (add)</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
                       <input type="checkbox" class="flow-toggle sr-only peer">
-                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                      <div
+                        class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500">
+                      </div>
                     </label>
                   </div>
                 </div>
                 <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
                   <div class="flex items-center justify-between">
                     <label class="flex items-center">
-                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Shopify order to NetSuite order (cash sale or sales order)</span>
+                      <input type="checkbox"
+                        class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                      <span class="text-sm font-medium text-gray-700">Shopify order to NetSuite order (cash sale or
+                        sales order)</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
                       <input type="checkbox" class="flow-toggle sr-only peer">
-                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                      <div
+                        class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500">
+                      </div>
                     </label>
                   </div>
                 </div>
                 <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
                   <div class="flex items-center justify-between">
                     <label class="flex items-center">
-                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Shopify customer to NetSuite customer (add or update)</span>
+                      <input type="checkbox"
+                        class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                      <span class="text-sm font-medium text-gray-700">Shopify customer to NetSuite customer (add or
+                        update)</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
                       <input type="checkbox" class="flow-toggle sr-only peer">
-                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                      <div
+                        class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500">
+                      </div>
                     </label>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- <div class="flow-selector mb-4">
-              <div class="flow-header cursor-pointer flex justify-between items-center">
-                <h3 class="text-md font-medium text-gray-700">Order Flows</h3>
-                <i class="fas fa-chevron-down text-gray-500"></i>
-              </div>
-              <div class="flow-options mt-4 hidden">
-                <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
-                  <div class="flex items-center justify-between">
-                    <label class="flex items-center">
-                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">On-demand Flow</span>
-                    </label>
-                    <label class="inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="flow-toggle sr-only peer">
-                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
-                    </label>
-                  </div>
-                </div>
-                <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
-                  <div class="flex items-center justify-between">
-                    <label class="flex items-center">
-                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Batch Flow</span>
-                    </label>
-                    <label class="inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="flow-toggle sr-only peer">
-                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
-                    </label>
-                  </div>
-                </div>
-                <div class="flow-option mb-3 p-2 border border-gray-200 rounded-md bg-white">
-                  <div class="flex items-center justify-between">
-                    <label class="flex items-center">
-                      <input type="checkbox" class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Customer Flow</span>
-                    </label>
-                    <label class="inline-flex items-center cursor-pointer">
-                      <input type="checkbox" class="flow-toggle sr-only peer">
-                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div> -->
           </div>
-          
+
           <!-- Right Side: JSON Preview -->
           <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
             <h3 class="text-md font-medium text-gray-700 mb-3">JSON Preview</h3>
-            <pre id="flow-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm" contenteditable="true"></pre>
+            <pre id="flow-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm"
+              contenteditable="true"></pre>
           </div>
         </div>
       </div>
@@ -429,60 +401,114 @@
           <!-- Left Side: Tax Settings -->
           <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
             <h3 class="text-md font-medium text-gray-700 mb-4">Sync sales tax to NetSuite</h3>
-            
+
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-2">Select Option</label>
-              <select id="tax-option" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select id="tax-option"
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="option1">Option 1</option>
                 <option value="option2">Option 2</option>
                 <option value="option3">Option 3</option>
               </select>
             </div>
-            
+
             <div class="mb-4">
               <label class="flex items-center">
-                <input type="checkbox" id="per-line-taxes" class="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded mr-2">
+                <input type="checkbox" id="per-line-taxes"
+                  class="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded mr-2">
                 <span class="text-sm font-medium text-gray-700">Per-line taxes on transaction enabled in NetSuite</span>
               </label>
             </div>
-            
+
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Default tax code or group when no match is found in NetSuite</label>
-              <input type="text" id="default-tax-code" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter default tax code">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Default tax code or group when no match is
+                found in NetSuite</label>
+              <input type="text" id="default-tax-code"
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter default tax code">
             </div>
           </div>
-          
+
           <!-- Right Side: JSON Preview -->
           <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
             <h3 class="text-md font-medium text-gray-700 mb-3">JSON Preview</h3>
-            <pre id="tax-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm" contenteditable="true"></pre>
+            <pre id="tax-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm"
+              contenteditable="true"></pre>
           </div>
         </div>
       </div>
     </div>
   </template>
 
-  <template id="shopifyDraftOrder">
+  <template id="dataCreationTemplate">
     <div class="bg-white rounded-lg shadow-md mb-8">
       <div class="p-4 border-b border-gray-200">
-        <h2 class="text-xl font-semibold text-gray-700">Configure Order Flow's Status</h2>
+        <h2 class="text-xl font-semibold text-gray-700">Configure the body</h2>
       </div>
       <div class="p-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-         
-          
+          <!-- Left Side: Flow Selection -->
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
+            <div class="usableFields">
+              <h3 class="text-md font-medium text-gray-700 mb-3">Find Fields</h3>
+              <div class="flex flex-col sm:flex-row gap-4">
+                <div class="relative w-full">
+                  <label for="autocomplete-input" class="block text-sm font-medium text-gray-700 mb-1">Usable Fields</label>
+                  <div class="relative">
+                    <input
+                      id="autocomplete-input"
+                      type="text"
+                      placeholder="Search for fields..."
+                      class="pl-10 w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <div id="options-dropdown" class="hidden absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+                    <ul id="options-list" class="py-1">
+                      <!-- Options will be populated here -->
+                    </ul>
+                  </div>
+                </div>
+                
+                <!-- Mapped Fields Input -->
+                <div class="relative w-full">
+                  <label for="mapped-fields-input" class="block text-sm font-medium text-gray-700 mb-1">Mapped Fields</label>
+                  <div class="relative">
+                    <input
+                      id="mapped-fields-input"
+                      type="text"
+                      placeholder="Search mapped fields..."
+                      class="pl-10 w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <div id="mapped-fields-dropdown" class="hidden absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+                    <ul id="mapped-fields-list" class="py-1">
+                      <!-- Mapped fields options will be populated here -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Right Side: JSON Preview -->
           <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
             <h3 class="text-md font-medium text-gray-700 mb-3">JSON Preview</h3>
-            <pre id="flow-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm" contenteditable="true"></pre>
+            <pre id="flow-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm"
+              contenteditable="true"></pre>
           </div>
+
         </div>
       </div>
-    </div>
   </template>
 
-  <script src="./scripts/main.js"></script>
-  <script src="./scripts/helper.js"></script>
+  <script type="module" src="./scripts/main.js"></script>
+  <script type="module" src="./scripts/helper.js"></script>
 </body>
 
 </html>

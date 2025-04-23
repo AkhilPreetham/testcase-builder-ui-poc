@@ -1,15 +1,23 @@
-//import {copyJsonToClipboard} from './helper'
-
+import {copyJsonToClipboard} from './helper.js'
+import {detailsHandler} from "./details/shopifyIA/functionDetails.js"
 
 
 document.addEventListener("DOMContentLoaded", () => {
     // Global variables to store dynamic variables
     let testCaseId, testCaseTitle, flowIdCounter, flowUpdateStatusCallCounter, updateSettingsCallCounter, interactionCounter, flowIdCustomField;
+    let testCaseName
     let addOnObj = {
       updateFlowStatus: "flowStatusPaneTemplate",
       updateSettings: "settingsPaneTemplate",
     }
     const dynamicVariables = new Set()
+    let reusableOptions = [
+      "process.env[DEFAULTS.PRODUCTS.0.SKU]",
+      "process.env[DEFAULT_TAX_CODES_AND_TAX_GROUPS.DEFAULT_TAX_GROUP.TAX_NAME]",
+      "process.env[NS_DEFAULT.LOCATION1]",
+      "process.env[DEFAULT_CUSTOMER.EMAIL]"
+    ]
+    
     function initApp() {
       // Add event listeners for main buttons
       document.getElementById("addInteractionBtn").addEventListener("click", addInteraction)
@@ -150,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
           step.querySelector(".storeNameId").classList.remove("hidden")
   
           // Set default values
-          const testCaseName = document.getElementById("testCaseName").value || "C8266"
+          testCaseName = document.getElementById("testCaseName").value || "C8266"
           //step.querySelector(".stepRequestFilterKey").placeholder = "name : Sync Shopify order on-demand to NetSuite (add)"
           step.querySelector(".stepRequestStoreVariable").value = `store_${testCaseName}flowId${flowIdCounter}`
           step.querySelector(".stepRequestStoreValue").value = "_id"
@@ -166,45 +174,45 @@ document.addEventListener("DOMContentLoaded", () => {
           step.querySelector(".customVariableValue").classList.remove("hidden")
   
           // Set default values
-          const tcName = document.getElementById("testCaseName").value || "C8266"
+          testCaseName = document.getElementById("testCaseName").value || "C8266"
           step.querySelector(".stepRequestFilterKey").value = "name : Shopify - NetSuite"
-          step.querySelector(".stepRequestStoreVariable").value = `store_${tcName}integrationID`
+          step.querySelector(".stepRequestStoreVariable").value = `store_${testCaseName}integrationID`
           step.querySelector(".stepRequestStoreValue").value = "_id"
           break
   
         case "updateFlowStatus":
           methodSelect.value = "PUT"
-          const integrationVar = document.getElementById("testCaseName").value || "C8266"
-          pathInput.value = `/integrations/{{${integrationVar}integrationID}}/settings/persistSettings`
+          testCaseName = document.getElementById("testCaseName").value || "C8266"
+          pathInput.value = `/integrations/{{${testCaseName}integrationID}}/settings/persistSettings`
           step.querySelector(".settingsMethodContainer").classList.remove("hidden")
           step.querySelector(".payloadContainer").classList.remove("hidden")
   
           // Set default values
           step.querySelector(".stepRequestSettingsMethod").value = "updateflowStatusThroughAPI"
           const suiteName = document.getElementById("suiteName").value || "Api_Suite1"
-          const testCase = document.getElementById("testCaseName").value || "C8266"
+          testCaseName = document.getElementById("testCaseName").value || "C8266"
           //const testTitle = step.closest(".interaction").querySelector(".testTitle").value || "OrderImportOrderImport"
           step.querySelector(".stepRequestPayload").value =
-            `/test-data/${suiteName}/payloads/${testCase}/${testCase}flowStatusJSON${flowUpdateStatusCallCounter}.json`
+            `/test-data/${suiteName}/payloads/${testCaseName}/${testCaseName}flowStatusJSON${flowUpdateStatusCallCounter}.json`
           flowUpdateStatusCallCounter++
-          attachAddOns(step, type)
+          attachSettingAddOns(step, type)
           break
   
         case "updateSettings":
           methodSelect.value = "PUT"
-          const intVar = document.getElementById("testCaseName").value || "C8266"
-          pathInput.value = `/integrations/{{${intVar}integrationID}}/settings/persistSettings`
+          testCaseName = document.getElementById("testCaseName").value || "C8266"
+          pathInput.value = `/integrations/{{${testCaseName}integrationID}}/settings/persistSettings`
           step.querySelector(".settingsMethodContainer").classList.remove("hidden")
           step.querySelector(".payloadContainer").classList.remove("hidden")
   
           // Set default values
           step.querySelector(".stepRequestSettingsMethod").value = "updateSettings"
           const suite = document.getElementById("suiteName").value || "Api_Suite1"
-          const tc = document.getElementById("testCaseName").value || "C8266"
+          testCaseName = document.getElementById("testCaseName").value || "C8266"
           //const tt = step.closest(".interaction").querySelector(".testTitle").value || "OrderImportOrderImport"
           step.querySelector(".stepRequestPayload").value =
-            `/test-data/${suite}/payloads/${tc}/${tc}updateSettings${updateSettingsCallCounter}.json`
-          attachAddOns(step, type)
+            `/test-data/${suite}/payloads/${testCaseName}/${testCaseName}updateSettings${updateSettingsCallCounter}.json`
+          attachSettingAddOns(step, type)
           updateSettingsCallCounter++
           break
   
@@ -217,18 +225,19 @@ document.addEventListener("DOMContentLoaded", () => {
   
           // Set default values
           const s = document.getElementById("suiteName").value || "Api_Suite1"
-          const t = document.getElementById("testCaseName").value || "C8266"
+          testCaseName = document.getElementById("testCaseName").value || "C8266"
           const title = step.closest(".interaction").querySelector(".testTitle").value || "OrderImportOrderImport"
           step.querySelector(".stepRequestPayload").value =
-            `/test-data/${s}/payloads/${t}/${t}createOrderViaAPI_payload1.json`
+            `/test-data/${s}/payloads/${testCaseName}/${testCaseName}createOrderViaAPI_payload1.json`
           step.querySelector(".stepRequestDataCreationMethod").value = "createSHPFDraftOrderthoughAPI"
           step.querySelector(".stepRequestUniqueValue").value = "PAID"
+          attachDataCreationAddOns(step, type)
           break
   
         case "flowValidation":
           methodSelect.value = "GET"
-          const tCase = document.getElementById("testCaseName").value || "C8266"
-          pathInput.value = `/flows/{{${tCase}flowId}}/jobs/latest`
+          testCaseName = document.getElementById("testCaseName").value || "C8266"
+          pathInput.value = `/flows/{{${testCaseName}flowId}}/jobs/latest`
           step.querySelector(".waitUntilContainer").classList.remove("hidden")
           step.querySelector(".customVariableField").classList.remove("hidden")
           step.querySelector(".customVariableValue").classList.remove("hidden")
@@ -238,15 +247,14 @@ document.addEventListener("DOMContentLoaded", () => {
   
           // Set default values
           step.querySelector(".stepRequestWaitUntil").value = "completed"
-          step.querySelector(".stepRequestStoreVariable").value = `store_${tCase}jobstatus`
+          step.querySelector(".stepRequestStoreVariable").value = `store_${testCaseName}jobstatus`
           step.querySelector(".stepRequestStoreValue").value = "[0].status"
           step.querySelector(".stepResponseStatus").value = "200"
           step.querySelector(".stepResponsePartialValidation").value = "true"
           const sName = document.getElementById("suiteName").value || "Api_Suite1"
-          const testC = document.getElementById("testCaseName").value || "C8266"
           const testT = step.closest(".interaction").querySelector(".testTitle").value || "OrderImportOrderImport"
           step.querySelector(".stepResponseBodyPath").value =
-            `/test-data/${sName}/responses/${testC}/${testC}flow_response.json`
+            `/test-data/${sName}/responses/${testCaseName}/${testCaseName}flow_response.json`
           break
   
         case "custom":
@@ -281,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     function buildTestCaseJson() {
-      const testCaseName = document.getElementById("testCaseName").value || ""
+      testCaseName = document.getElementById("testCaseName").value || ""
       const suiteTitle = document.getElementById("suiteTitle").value || ""
       const suiteName = document.getElementById("suiteName").value || ""
       const storeName = document.getElementById("storeName").value || ""
@@ -469,7 +477,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     function updatePathsWithDynamicVariables() {
       const pathInputs = document.querySelectorAll(".stepRequestPath, .finalRequestPath")
-      const testCaseName = document.getElementById("testCaseName").value || "C8266"
+      testCaseName = document.getElementById("testCaseName").value || "C8266"
   
       pathInputs.forEach((input) => {
         const currentValue = input.value
@@ -512,7 +520,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    function attachAddOns (step, type){
+    function attachSettingAddOns (step, type){
       let template = document.getElementById(addOnObj[type])
       let templateClone = document.importNode(template.content, true)
       step.querySelector(".addOnForPreRequest").appendChild(templateClone)
@@ -583,5 +591,115 @@ document.addEventListener("DOMContentLoaded", () => {
      }
     }
 
+    function attachDataCreationAddOns(step, type) {
+      let details
+      const templateClone = document.importNode(
+        document.getElementById("dataCreationTemplate").content, 
+        true
+      );
+      const addOnContainer = step.querySelector(".addOnForPreRequest");
+      addOnContainer.appendChild(templateClone);
+    
+      const updateDetails = () => {
+        console.log("inside updateDetails")
+        const functionValue = step.querySelector(".stepRequestDataCreationMethod").value;
+        details = detailsHandler[functionValue](testCaseName);
+        const pathInput = step.querySelector(".stepRequestPath")
+        pathInput.value = details.path
+        addOnContainer.querySelector('#flow-json-preview').textContent = JSON.stringify(details.json, null, 2);
+        
+        handleReusableOptions(addOnContainer, JSON.parse(JSON.stringify(reusableOptions)))
+        console.log("details.mapFields ", details.mapFields)
+        reusableOptions.push(...details.mapFields)
+        let mappedOptions = []
+        mappedOptions.push(...details.mapFields)
+        handleMappedOptions(addOnContainer, mappedOptions)
+      };
+    
+      updateDetails();
+      step.querySelector(".stepRequestDataCreationMethod").addEventListener("change", updateDetails);
+      
+
+    }
+
+    function filterOptions(options, inputValue) {
+      if (!inputValue) {
+        return options
+      }
+      return options.filter((option) => option.toLowerCase().includes(inputValue.toLowerCase()))
+    }
+
+    function renderOptions(filteredOptions, optionsList, inputElement, dropdownElement) {
+      optionsList.innerHTML = ""
+    console.log("filteredOptions is ", filteredOptions)
+      if (filteredOptions.length === 0) {
+        const noResults = document.createElement("li")
+        noResults.className = "px-4 py-2 text-sm text-gray-500"
+        noResults.textContent = "No options found"
+        optionsList.appendChild(noResults)
+        return
+      }
+    
+      filteredOptions.forEach((option) => {
+        console.log("option inside filteredOptions", option)
+        const li = document.createElement("li")
+        li.className = "px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+        li.textContent = option
+        li.addEventListener("click", () => {
+          inputElement.value = option
+          dropdownElement.classList.add("hidden")
+        })
+        optionsList.appendChild(li)
+      })
+    }
+
+    
+
+    function handleReusableOptions(addOnContainer, options) {
+      console.log("entered inside handleReusableOptions")
+      const inputElement = addOnContainer.querySelector("#autocomplete-input")
+      const dropdownElement = addOnContainer.querySelector("#options-dropdown")
+      const optionsList = addOnContainer.querySelector("#options-list")
+      console.log("reusableOptions before ", options)
+      setupAutocomplete(inputElement,dropdownElement, optionsList, options)
+      document.addEventListener("click", (event) => {
+        if (!inputElement.contains(event.target) && !dropdownElement.contains(event.target)) {
+          dropdownElement.classList.add("hidden")
+        }
+      })
+    }
+
+    function handleMappedOptions(addOnContainer, mappingOptions) {
+      console.log("entered inside handleMappedOptions")
+      console.log("mappingOptions ", mappingOptions)
+      const mappedFieldsInput = addOnContainer.querySelector("#mapped-fields-input")
+      const mappedFieldsDropdown = addOnContainer.querySelector("#mapped-fields-dropdown")
+      const mappedFieldsList = addOnContainer.querySelector("#mapped-fields-list")
+      setupAutocomplete(mappedFieldsInput,mappedFieldsDropdown, mappedFieldsList, mappingOptions)
+      document.addEventListener("click", (event) => {
+        if (!mappedFieldsInput.contains(event.target) && !mappedFieldsDropdown.contains(event.target)) {
+          mappedFieldsDropdown.classList.add("hidden")
+        }
+      })
+    }
+
+    function setupAutocomplete(inputElement, dropdownElement, optionsList, options) {
+      // Show dropdown when input is focused
+      inputElement.addEventListener("focus", () => {
+        const filteredOptions = filterOptions(options, inputElement.value)
+        renderOptions(filteredOptions, optionsList,  inputElement, dropdownElement)
+        dropdownElement.classList.remove("hidden")
+      })
+    
+      // Filter options as user types
+      inputElement.addEventListener("input", () => {
+        const filteredOptions = filterOptions(options, inputElement.value)
+        renderOptions(filteredOptions, optionsList, inputElement, dropdownElement)
+        dropdownElement.classList.remove("hidden")
+      })
+    
+      // Initial render of options
+      renderOptions(options, optionsList, inputElement, dropdownElement)
+    }
   })
   

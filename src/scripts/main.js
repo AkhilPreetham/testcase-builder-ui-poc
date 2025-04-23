@@ -1,10 +1,10 @@
 import {copyJsonToClipboard} from './helper.js'
-import {detailsHandler} from "./details/shopifyIA/functionDetails.js"
+import {createFunctionDetailsHandler} from "./details/shopifyIA/functionDetails.js"
 
 
 document.addEventListener("DOMContentLoaded", () => {
     // Global variables to store dynamic variables
-    let testCaseId, testCaseTitle, flowIdCounter, flowUpdateStatusCallCounter, updateSettingsCallCounter, interactionCounter, flowIdCustomField;
+    let testCaseId, testCaseTitle, flowIdCounter, flowUpdateStatusCallCounter, updateSettingsCallCounter, dataCreationCounter, interactionCounter, flowIdCustomField;
     let testCaseName
     let addOnObj = {
       updateFlowStatus: "flowStatusPaneTemplate",
@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       flowUpdateStatusCallCounter = 1
       updateSettingsCallCounter = 1
       interactionCounter = 1
+      dataCreationCounter = 1
       flowIdCustomField= []
       // Add first interaction by default
       addInteraction()
@@ -129,8 +130,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ".settingsMethodContainer",
         ".payloadContainer",
         ".dataCreationMethodContainer",
-        ".uniqueValueContainer",
-        ".secondaryValueContainer",
+        ".uniqueValueContainer1",
+        ".uniqueValueContainer2",
+        ".uniqueValueContainer3",
         ".waitUntilContainer",
         ".stepResponse",
         ".partialValidationContainer",
@@ -221,17 +223,18 @@ document.addEventListener("DOMContentLoaded", () => {
           pathInput.value = "/connections/process.env[CONNECTIONS.SHOPIFY_STORE_1]/import"
           step.querySelector(".payloadContainer").classList.remove("hidden")
           step.querySelector(".dataCreationMethodContainer").classList.remove("hidden")
-          step.querySelector(".uniqueValueContainer").classList.remove("hidden")
+          //step.querySelector(".uniqueValueContainer1").classList.remove("hidden")
   
           // Set default values
           const s = document.getElementById("suiteName").value || "Api_Suite1"
           testCaseName = document.getElementById("testCaseName").value || "C8266"
           const title = step.closest(".interaction").querySelector(".testTitle").value || "OrderImportOrderImport"
           step.querySelector(".stepRequestPayload").value =
-            `/test-data/${s}/payloads/${testCaseName}/${testCaseName}createOrderViaAPI_payload1.json`
+            `/test-data/${s}/payloads/${testCaseName}/${testCaseName}dataCreation_payload${dataCreationCounter}.json`
           step.querySelector(".stepRequestDataCreationMethod").value = "createSHPFDraftOrderthoughAPI"
-          step.querySelector(".stepRequestUniqueValue").value = "PAID"
+          //step.querySelector(".stepRequestUniqueValue1").value = "PAID"
           attachDataCreationAddOns(step, type)
+          dataCreationCounter++
           break
   
         case "flowValidation":
@@ -267,7 +270,10 @@ document.addEventListener("DOMContentLoaded", () => {
           step.querySelector(".bodyPathContainer").classList.remove("hidden")
           step.querySelector(".payloadContainer").classList.remove("hidden")
           step.querySelector(".dataCreationMethodContainer").classList.remove("hidden")
-          step.querySelector(".uniqueValueContainer").classList.remove("hidden")
+          step.querySelectorAll(".uniqueValueContainer1").forEach((e) => e.classList.remove("hidden"))
+          step.querySelectorAll(".uniqueValueContainer2").forEach((e) => e.classList.remove("hidden"))
+          step.querySelectorAll(".uniqueValueContainer3").forEach((e) => e.classList.remove("hidden"))
+          step.querySelector(".dataValidationMethodContainer").classList.remove("hidden")
           // Show basic fields for custom step
           methodSelect.value = "GET"
           pathInput.value = ""
@@ -416,7 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
             request.dataCreationMethod = dataCreationMethod
           }
   
-          const uniqueValue = stepEl.querySelector(".stepRequestUniqueValue").value
+          const uniqueValue = stepEl.querySelector(".stepRequestUniqueValue1").value
           if (uniqueValue) {
             request.uniqueValue = uniqueValue
           }
@@ -592,34 +598,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function attachDataCreationAddOns(step, type) {
-      let details
       const templateClone = document.importNode(
-        document.getElementById("dataCreationTemplate").content, 
+        document.getElementById("dataCreationTemplate").content,
         true
       );
       const addOnContainer = step.querySelector(".addOnForPreRequest");
       addOnContainer.appendChild(templateClone);
     
-      const updateDetails = () => {
-        console.log("inside updateDetails")
+      const updateDetails = (step) => {
         const functionValue = step.querySelector(".stepRequestDataCreationMethod").value;
-        details = detailsHandler[functionValue](testCaseName);
-        const pathInput = step.querySelector(".stepRequestPath")
-        pathInput.value = details.path
-        addOnContainer.querySelector('#flow-json-preview').textContent = JSON.stringify(details.json, null, 2);
-        
-        handleReusableOptions(addOnContainer, JSON.parse(JSON.stringify(reusableOptions)))
-        console.log("details.mapFields ", details.mapFields)
-        reusableOptions.push(...details.mapFields)
-        let mappedOptions = []
-        mappedOptions.push(...details.mapFields)
-        handleMappedOptions(addOnContainer, mappedOptions)
+        const details = createFunctionDetailsHandler[functionValue](testCaseName);
+    
+        step.querySelector(".stepRequestPath").value = details.path;
+    
+        Object.keys(details.uniqueValues).forEach((key, index) => {
+          const uniqueValueContainer = step.querySelector(`.uniqueValueContainer${index + 1}`);
+          uniqueValueContainer.classList.remove("hidden");
+          uniqueValueContainer.querySelector(`.stepRequestUniqueValue${index + 1}`).placeholder = details.uniqueValues[key];
+        });
+    
+        addOnContainer.querySelector("#flow-json-preview").textContent = JSON.stringify(details.json, null, 2);
+        handleReusableOptions(addOnContainer, [...reusableOptions]);
+        reusableOptions.push(...details.mapFields);
+        handleMappedOptions(addOnContainer, [...details.mapFields]);
       };
     
-      updateDetails();
+      updateDetails(step);
       step.querySelector(".stepRequestDataCreationMethod").addEventListener("change", updateDetails);
-      
-
     }
 
     function filterOptions(options, inputValue) {

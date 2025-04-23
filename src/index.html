@@ -260,16 +260,22 @@
               <option value="createShipmentforSHPFOrder">createShipmentforSHPFOrder</option>
             </select>
           </div>
-          <div class="mb-2 uniqueValueContainer hidden">
+          <div class="mb-2 uniqueValueContainer1 hidden">
             <label class="block text-xs font-medium text-gray-700 mb-1">Unique Value</label>
             <input type="text"
-              class="stepRequestUniqueValue w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="stepRequestUniqueValue1 w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g. PAID">
           </div>
-          <div class="mb-2 secondaryValueContainer hidden">
+          <div class="mb-2 uniqueValueContainer2 hidden">
             <label class="block text-xs font-medium text-gray-700 mb-1">Secondary Value</label>
             <input type="text"
-              class="stepRequestSecondaryValue w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="stepRequestUniqueValue2 w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. PAID">
+          </div>
+          <div class="mb-2 uniqueValueContainer3 hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Tertiary Value</label>
+            <input type="text"
+              class="stepRequestUniqueValue3 w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g. PAID">
           </div>
           <div class="mb-2 waitUntilContainer hidden">
@@ -296,11 +302,39 @@
               <option value="true">true</option>
             </select>
           </div>
+          <div class="mb-2 dataValidationMethodContainer hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Data Validation Method</label>
+            <select type="text"
+              class="stepRequestDataValidationMethod w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. validateSalesOrderWithDiscountItem">
+              <option value="createSHPFDraftOrderthoughAPI">validateSalesOrderWithDiscountItem</option>
+              <option value="createProduct">validateInvoiceWithDiscountItem</option>
+              <option value="createShipmentforSHPFOrder">verifyShopifyBillingANDrefund</option>
+            </select>
+          </div>
           <div class="mb-2 bodyPathContainer">
             <label class="block text-xs font-medium text-gray-700 mb-1">Body Path</label>
             <input type="text"
               class="stepResponseBodyPath w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="e.g. /test-data/Api_Suite1/responses/...">
+          </div>
+          <div class="mb-2 uniqueValueContainer1 hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Unique Value</label>
+            <input type="text"
+              class="stepResponseUniqueValue1 w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. {{C8266shopifyOrderId}}">
+          </div>
+          <div class="mb-2 uniqueValueContainer2 hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Secondary Value</label>
+            <input type="text"
+              class="stepResponseUniqueValue2 w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. {{C8266shopifyOrderId}}">
+          </div>
+          <div class="mb-2 uniqueValueContainer3 hidden">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Tertiary Value</label>
+            <input type="text"
+              class="stepResponseUniqueValue3 w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. {{C8266shopifyOrderId}}">
           </div>
         </div>
       </div>

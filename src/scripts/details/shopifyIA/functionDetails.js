@@ -1,6 +1,6 @@
 
 
-export const detailsHandler = {
+export const createFunctionDetailsHandler = {
     createSHPFDraftOrderthoughAPI: (testCaseName) => {
         let json = {
             "draft_order": {
@@ -38,10 +38,14 @@ export const detailsHandler = {
            `{{${testCaseName}customerFirstName}}`,
            `{{${testCaseName}customerLastName}}`
         ]
+        let uniqueValues = {
+          uniqueValue: "financialStatus"
+        }
         return {
             json,
             path,
-            mapFields
+            mapFields,
+            uniqueValues
         }
     },
     createProduct: (testCaseName) => {

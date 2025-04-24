@@ -63,10 +63,10 @@
             class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-1 px-3 rounded-md mr-2">
             <i class="fas fa-copy mr-1"></i>Copy
           </button>
-          <!-- <button id="downloadJsonBtn"
+          <button id="createPayloadBodies"
             class="bg-green-500 hover:bg-green-600 text-white font-medium py-1 px-3 rounded-md">
-            <i class="fas fa-download mr-1"></i>Download
-          </button> -->
+            <i class="fas fa-download mr-1"></i>Create Payload files
+          </button>
         </div>
       </div>
       <pre id="jsonPreview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto max-h-96"
@@ -144,6 +144,7 @@
                 <select type="text"
                   class="finalResponseValidationMethod w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="e.g. validateSalesOrderWithDiscountItem">
+                  <option value="pleaseSelect">Please select</option>
                   <option value="validateSalesOrderWithDiscountItem">validateSalesOrderWithDiscountItem</option>
                   <option value="validateInvoiceWithDiscountItem">validateInvoiceWithDiscountItem</option>
                   <option value="verifyShopifyBillingANDrefund">verifyShopifyBillingANDrefund</option>
@@ -388,8 +389,7 @@
                     <label class="flex items-center">
                       <input type="checkbox"
                         class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Sync Shopify order on-demand to NetSuite
-                        (add)</span>
+                      <span class="text-sm font-medium text-gray-700">Sync Shopify order on-demand to NetSuite (add)</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
                       <input type="checkbox" class="flow-toggle sr-only peer">
@@ -404,8 +404,7 @@
                     <label class="flex items-center">
                       <input type="checkbox"
                         class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Shopify order to NetSuite order (cash sale or
-                        sales order)</span>
+                      <span class="text-sm font-medium text-gray-700">Shopify order to NetSuite order (cash sale or sales order)</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
                       <input type="checkbox" class="flow-toggle sr-only peer">
@@ -420,8 +419,7 @@
                     <label class="flex items-center">
                       <input type="checkbox"
                         class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Shopify customer to NetSuite customer (add or
-                        update)</span>
+                      <span class="text-sm font-medium text-gray-700">Shopify customer to NetSuite customer (add or update)</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
                       <input type="checkbox" class="flow-toggle sr-only peer">
@@ -455,15 +453,13 @@
         <div class="settings-add-on grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Left Side: Tax Settings -->
           <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
-            <h3 class="text-md font-medium text-gray-700 mb-4">Sync sales tax to NetSuite</h3>
-
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Select Option</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Sync sales tax to NetSuite as *</label>
               <select id="tax-option"
                 class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
+                <option value="Add total tax against a single line item on the order">Add total tax against a single line item on the order</option>
+                <option value="NetSuite calculate taxes using its own tax engine">NetSuite calculate taxes using its own tax engine</option>
+                <option value="Overwrite taxes with Shopify tax amounts">Overwrite taxes with Shopify tax amounts</option>
               </select>
             </div>
 
@@ -476,11 +472,17 @@
             </div>
 
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Default tax code or group when no match is
-                found in NetSuite</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Default tax code or group when no match is found in NetSuite</label>
               <input type="text" id="default-tax-code"
                 class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter default tax code">
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Shopify order IDs</label>
+              <input type="text" id="shopify-order-id"
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g. {{C8266shopifyOrderId}}">
             </div>
           </div>
 
@@ -530,8 +532,7 @@
 
                 <!-- Mapped Fields Input -->
                 <div class="relative w-full">
-                  <label for="mapped-fields-input" class="block text-sm font-medium text-gray-700 mb-1">Mapped
-                    Fields</label>
+                  <label for="mapped-fields-input" class="block text-sm font-medium text-gray-700 mb-1">Dynamic Fields that are being mapped</label>
                   <div class="relative">
                     <input id="mapped-fields-input" type="text" placeholder="Search mapped fields..."
                       class="pl-10 w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
@@ -565,6 +566,7 @@
   </template>
 
   <script type="module" src="./scripts/main.js"></script>
+  <!-- helper is not used as of now -->
   <script type="module" src="./scripts/helper.js"></script>
 </body>
 

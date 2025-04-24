@@ -149,6 +149,18 @@ export const creationFunctionDetailsHandler = {
 }
 
 export const validationFunctionDetailsHandler = {
+  pleaseSelect: (testCaseName) => {
+    let json = {}       
+    let path = "";
+    let mapFields = []
+    let uniqueValues = {}
+    return {
+        json,
+        path,
+        mapFields,
+        uniqueValues
+    }
+},
   validateSalesOrderWithDiscountItem: (testCaseName) => {
       let json = {
         "Shipping Cost": ".00",

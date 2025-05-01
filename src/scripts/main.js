@@ -874,9 +874,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           `.stepRequestUniqueValue${index + 1}`
         ).placeholder = details.uniqueValues[key];
       });
-
+      details.json = JSON.stringify(details.json).split("testCaseName").join(`${testCaseName}`);
       addOnContainer.querySelector("#flow-json-preview").textContent =
-        JSON.stringify(details.json, null, 2);
+        JSON.stringify(JSON.parse(details.json), null, 2);
       addOnContainer
         .querySelector("#flow-json-preview")
         .addEventListener("input", () => {
@@ -1126,9 +1126,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           `.finalStepResponseUniqueValue${index + 1}`
         ).placeholder = details.uniqueValues[key];
       });
-
+      details.json = JSON.stringify(details.json).split("testCaseName").join(`${testCaseName}`);
       addOnContainer.querySelector("#flow-json-preview").textContent =
-        JSON.stringify(details.json, null, 2);
+        JSON.stringify(JSON.parse(details.json), null, 2);
       addOnContainer
         .querySelector("#flow-json-preview")
         .addEventListener("input", () => {

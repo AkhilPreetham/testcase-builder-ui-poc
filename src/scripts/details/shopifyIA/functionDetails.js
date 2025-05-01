@@ -78,10 +78,10 @@ export const creationFunctionDetailsHandler = {
   },
   createShipmentforSHPFOrder: (testCaseName) => {
     let json = {
-      shpfOrderId: "{{T2993shopifyOrderId}}",
+      shpfOrderId: "{{testCaseNameshopifyOrderId}}",
       locationId: "process.env[SH_DEFAULT.AUTO_QA_LOCATION1]",
       trackingNumber: 123456,
-      fulfilLines: [{ lineID: "{{T2993lineItem1}}", quantity: 2 }],
+      fulfilLines: [{ lineID: "{{testCaseNamelineItem1}}", quantity: 2 }],
     };
     let path = "/connections/process.env[CONNECTIONS.SHOPIFY_STORE_1]/import";
     let mapFields = [`{{${testCaseName}fulfilmentRecordID}}`];
@@ -102,7 +102,7 @@ export const creationFunctionDetailsHandler = {
         },
         email: "process.env[DEFAULT_TAXABLE_CUSTOMER.EMAIL]",
         lineItems: [
-          { quantity: 2, variantId: "{{C111forDependentResources1}}" },
+          { quantity: 2, variantId: "{{testCaseNameforDependentResources1}}" },
         ],
         shippingAddress: {
           address1: "process.env[DEFAULT_ADDRESSES.TAX_SHIPPING.ADDR1]",
@@ -147,7 +147,7 @@ export const creationFunctionDetailsHandler = {
           name: "process.env[DEFAULTS.PRODUCTS.0.SKU]",
           qty: 1,
           amount: 8.99,
-          etailLineId: "{{C8266lineItem1}}",
+          etailLineId: "{{testCaseNamelineItem1}}",
           id: "2874781_1",
           taxcode:
             "process.env[DEFAULT_TAX_CODES_AND_TAX_GROUPS.DEFAULT_TAX_GROUP.TAX_NAME]",
@@ -157,7 +157,7 @@ export const creationFunctionDetailsHandler = {
           name: "process.env[DEFAULTS.PRODUCTS.1.SKU]",
           qty: 1,
           amount: 8.99,
-          etailLineId: "{{C8266lineItem2}}",
+          etailLineId: "{{testCaseNamelineItem2}}",
           id: "2874781_3",
           taxcode:
             "process.env[DEFAULT_TAX_CODES_AND_TAX_GROUPS.DEFAULT_TAX_GROUP.TAX_NAME]",
@@ -189,7 +189,7 @@ export const creationFunctionDetailsHandler = {
   createNScustomercreditmemoRefund: (testCaseName) => {
     let json = {
       "customer_name": "process.env[DEFAULT_CUSTOMER.ID]",
-      "eTailOrderId": "{{C8266shopifyOrderId}}",
+      "eTailOrderId": "{{testCaseNameshopifyOrderId}}",
       "id": "2874880",
       "amount": "13.50",
       "etail_channel": "process.env[AUT.SH]",
@@ -246,10 +246,10 @@ export const validationFunctionDetailsHandler = {
       etail_line_items: [
         {
           Item: "process.env[DEFAULTS.PRODUCTS.0.SKU]",
-          Quantity: "{{C111lineItemQty1}}",
+          Quantity: "{{testCaseNamelineItemQty1}}",
           "Item Rate": "10.00",
           "Amount (Foreign Currency)": "20.00",
-          "eTail Order Line Id": "{{C111lineItem1}}",
+          "eTail Order Line Id": "{{testCaseNamelineItem1}}",
           "eTail Order Line Tax": "2.9",
         },
       ],
@@ -259,7 +259,7 @@ export const validationFunctionDetailsHandler = {
       "eTail Order Line Tax": null,
       "eTail Order Total Variance": "0",
       "eTail Order Fulfillment Exported": null,
-      "eTail Order Id": "{{C111shopifyOrderId}}",
+      "eTail Order Id": "{{testCaseNameshopifyOrderId}}",
       "eTail Order Billing Exported": "T",
       "eTail Order Auto Billing Exported": null,
       "eTail Discount Total Variance": "0",
@@ -287,10 +287,10 @@ export const validationFunctionDetailsHandler = {
       etail_line_items: [
         {
           Item: "process.env[DEFAULTS.PRODUCTS.0.SKU]",
-          Quantity: "{{C8266lineItemQty1}}",
+          Quantity: "{{testCaseNamelineItemQty1}}",
           "Item Rate": "8.99",
           "Amount (Foreign Currency)": "44.95",
-          "eTail Order Line Id": "{{C8266lineItem1}}",
+          "eTail Order Line Id": "{{testCaseNamelineItem1}}",
           "eTail Order Line Tax": "3.75",
           "Tax Item":
             "process.env[DEFAULT_TAX_CODES_AND_TAX_GROUPS.DEFAULT_TAX_GROUP.TAX_NAME]",
@@ -304,14 +304,14 @@ export const validationFunctionDetailsHandler = {
           "eTail Order Line Tax": "3.75",
           "Tax Item":
             "process.env[DEFAULT_TAX_CODES_AND_TAX_GROUPS.DEFAULT_TAX_GROUP.TAX_NAME]",
-          "eTail Order Item Type Id": "Celigo_Discount_Line_{{C8266lineItem1}}",
+          "eTail Order Item Type Id": "Celigo_Discount_Line_{{testCaseNamelineItem1}}",
         },
         {
           Item: "process.env[DEFAULTS.PRODUCTS.1.SKU]",
-          Quantity: "{{C8266lineItemQty1}}",
+          Quantity: "{{testCaseNamelineItemQty1}}",
           "Item Rate": "8.99",
           "Amount (Foreign Currency)": "44.95",
-          "eTail Order Line Id": "{{C8266lineItem2}}",
+          "eTail Order Line Id": "{{testCaseNamelineItem2}}",
           "eTail Order Line Tax": "3.75",
           "Tax Item":
             "process.env[DEFAULT_TAX_CODES_AND_TAX_GROUPS.DEFAULT_TAX_GROUP.TAX_NAME]",
@@ -325,13 +325,13 @@ export const validationFunctionDetailsHandler = {
           "eTail Order Line Tax": "3.75",
           "Tax Item":
             "process.env[DEFAULT_TAX_CODES_AND_TAX_GROUPS.DEFAULT_TAX_GROUP.TAX_NAME]",
-          "eTail Order Item Type Id": "Celigo_Discount_Line_{{C8266lineItem2}}",
+          "eTail Order Item Type Id": "Celigo_Discount_Line_{{testCaseNamelineItem2}}",
         },
         {
           Item: "Ship001",
           Quantity: "1",
-          "Item Rate": "{{C8266shippingCost}}",
-          "Amount (Foreign Currency)": "{{C8266shippingCost}}",
+          "Item Rate": "{{testCaseNameshippingCost}}",
+          "Amount (Foreign Currency)": "{{testCaseNameshippingCost}}",
           "eTail Order Line Id": null,
           "eTail Order Line Tax": ".63",
           "Tax Item":

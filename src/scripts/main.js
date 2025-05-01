@@ -1,10 +1,9 @@
-import { copyJsonToClipboard } from "./helper.js";
 import {
   creationFunctionDetailsHandler,
   validationFunctionDetailsHandler,
 } from "./details/shopifyIA/functionDetails.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   // Global variables to store dynamic variables
   let testCaseId,
     testCaseTitle,
@@ -24,12 +23,15 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSettings: "settingsPaneTemplate",
   };
   const dynamicVariables = new Set();
-  let reusableOptions = [
-    "process.env[DEFAULTS.PRODUCTS.0.SKU]",
-    "process.env[DEFAULT_TAX_CODES_AND_TAX_GROUPS.DEFAULT_TAX_GROUP.TAX_NAME]",
-    "process.env[NS_DEFAULT.LOCATION1]",
-    "process.env[DEFAULT_CUSTOMER.EMAIL]",
-  ];
+
+  // let reusableOptions = [
+  //   "process.env[DEFAULTS.PRODUCTS.0.SKU]",
+  //   "process.env[DEFAULT_TAX_CODES_AND_TAX_GROUPS.DEFAULT_TAX_GROUP.TAX_NAME]",
+  //   "process.env[NS_DEFAULT.LOCATION1]",
+  //   "process.env[DEFAULT_CUSTOMER.EMAIL]",
+  // ];
+  let reusableOptions = await getEnvDetails('../src/env/dev.txt')
+  console.log("reusableOptions is ", reusableOptions);
 
   function initApp() {
     // Add event listeners for main buttons
@@ -114,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
           interaction.querySelector(".preRequestStepsContainer")
         );
       });
-
+    
     // Add event listeners for input fields
     const inputFields = interaction.querySelectorAll("input, select");
     inputFields.forEach((field) => {
@@ -355,7 +357,8 @@ document.addEventListener("DOMContentLoaded", () => {
         step.querySelector(
           ".stepResponseBodyPath"
         ).value = `/test-data/${sName}/responses/${testCaseName}/${testCaseName}flowValidate_response${flowValidateResponseCounter}.json`;
-        flowValidateResponseCounter++;
+        // flowValidateResponseCounter++;
+        attachFlowValidationAddOn(step, type);
         break;
 
       case "custom":
@@ -577,6 +580,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const uniqueValue = stepEl.querySelector(
           ".stepRequestUniqueValue1"
         ).value;
+        //TO DO: add more unique values
         if (uniqueValue) {
           request.uniqueValue = uniqueValue;
         }
@@ -894,6 +898,49 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
+  function attachFlowValidationAddOn(step, type) {
+    let payloadObj = {}
+    let preStepBodyPath = step.querySelector(".stepResponseBodyPath").value;
+    console.log("preStepBodyPath is ", step.querySelector(".stepRequestPath").value)
+    flowValidateResponseCounter++;
+    const templateClone = document.importNode(
+      document.getElementById("flowValidationTemplate").content,
+      true
+    );
+    const addOnContainer = step.querySelector(".addOnForPreRequest");
+    addOnContainer.appendChild(templateClone);
+    let jsonBody = [
+      {
+        "_flowId": `{{${step.querySelector(".stepRequestPath").value.split('{{')[1].split('}}')[0]}}}`,
+        "type": "flow",
+        "status": "completed",
+        "numError": 0,
+        "numSuccess": 1,
+        "numIgnore": 0,
+        "numResolved": 0
+      }
+    ]
+    
+    addOnContainer.querySelector("#flow-json-preview").textContent =
+        JSON.stringify(jsonBody, null, 2);
+      addOnContainer
+        .querySelector("#flow-json-preview")
+        .addEventListener("input", () => {
+          payloadObj = {
+            body: addOnContainer.querySelector("#flow-json-preview")
+              .textContent,
+            path: preStepBodyPath,
+          };
+          console.log("payloadObj pre is ", payloadObj);
+        });
+      payloadObj = {
+        body: addOnContainer.querySelector("#flow-json-preview").textContent,
+        path: preStepBodyPath,
+      };
+      console.log("payloadObj pre is ", payloadObj);
+      pushPayloads(payloadObj);
+  }
+
   function filterOptions(options, inputValue) {
     if (!inputValue) {
       return options;
@@ -1120,4 +1167,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
   }
+  
 });
+
+async function getEnvDetails(filePath) {
+  const response = await fetch(`http://localhost:3000/get-env-details?filePath=${filePath}`);
+  const result = await response.json();
+  if (result.success) {
+    console.log("Env details are ", result.envKeys);
+    return result.envKeys;
+  } else {
+    alert("Failed to get env details: " + result.error);
+  }
+}

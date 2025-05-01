@@ -52,6 +52,34 @@ app.post('/save-payload', (req, res) => {
   }
 });
 
+app.get('/get-env-details', (req, res) => {
+  try{
+const { filePath } = req.query;
+console.log("filePath is ", filePath)
+
+  const envFilePath = path.resolve(__dirname, filePath); // adjust path if needed
+  console.log("envFilePath is ", envFilePath)
+    const envContent = fs.readFileSync(envFilePath, 'utf-8');
+    
+    
+    const envKeys = envContent
+      .split('\n')                        // Split by lines
+      .map(line => line.trim())          // Trim whitespace
+      .filter(line => line && !line.startsWith('#'))  // Remove empty and comment lines
+      .map(line => line.split('=')[0])   // Get key part before =
+      .map(key => `process.env["${key}"]`); // Format as process.env["KEY"]
+    
+    console.log(envKeys);
+    res.json({ success: true, envKeys });
+  //return envKeys;
+  } catch (e){
+    console.log("error is ", e)
+    res.status(500).json({ error: 'Failed to read file' });
+  }
+  
+});
+
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

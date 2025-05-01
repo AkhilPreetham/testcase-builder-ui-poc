@@ -565,6 +565,21 @@
       </div>
   </template>
 
+  <template id="flowValidationTemplate">
+    <div class="bg-white rounded-lg shadow-md mb-8">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-700">Flow Validation</h2>
+      </div>
+      <div class="p-6">
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-200">
+          <h3 class="text-md font-medium text-gray-700 mb-3">JSON Preview</h3>
+          <pre id="flow-json-preview" class="bg-gray-800 text-green-400 p-4 rounded-md overflow-auto h-48 text-sm"
+            contenteditable="true"></pre>
+        </div>
+      </div>
+    </div>
+  </template>
+
   <script type="module" src="./scripts/main.js"></script>
   <!-- helper is not used as of now -->
   <script type="module" src="./scripts/helper.js"></script>

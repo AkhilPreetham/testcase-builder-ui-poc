@@ -57,17 +57,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       .getElementById("suiteName")
       .addEventListener("input", updateJsonPreview);
     document
-      .getElementById("suiteName")
-      .addEventListener("input", () => {
-        console.log("triggered to update ")
-        document.querySelectorAll(".finalResponseBodyPath").forEach((ele) => {
-          let tempPath = ele.value
-          let y = tempPath.split("/")
-          y[2] = document.getElementById("suiteName").value
-          ele.value = y.join("/")
-        })
-      });
-    document
       .getElementById("storeName")
       .addEventListener("input", updateJsonPreview);
     flowIdCounter = 1;
@@ -371,6 +360,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         ).value = `/test-data/${sName}/responses/${testCaseName}/${testCaseName}flowValidate_response${flowValidateResponseCounter}.json`;
         // flowValidateResponseCounter++;
         attachFlowValidationAddOn(step, type);
+        updateJsonPreview();
         break;
       case "runFlow":
         methodSelect.value = "POST";
@@ -380,6 +370,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         step.querySelector(".filterKeyContainer1").addEventListener("change", () => {
           fieldID = filterMapData.get(step.querySelector(".stepRequestFilterKey1").value)
           pathInput.value = `/flows/{{${fieldID}}}/run`
+          updateJsonPreview();
         })
 
         // Set default values
@@ -954,9 +945,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           "numResolved": 0
         }
       ]
-  
+
       addOnContainer.querySelector("#flow-json-preview").textContent =
         JSON.stringify(jsonBody, null, 2);
+        updateJsonPreview();
     })
     addOnContainer
       .querySelector("#flow-json-preview")
@@ -1002,7 +994,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     filteredOptions.forEach((option) => {
-      console.log("option inside filteredOptions", option);
+      //console.log("option inside filteredOptions", option);
       const li = document.createElement("li");
       li.className = "px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm";
       li.textContent = option;
@@ -1095,8 +1087,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function updateFinalSteps(interaction) {
     let finalStepBodyPath = `/test-data/${suiteName}/responses/${testCaseName}/${testCaseName}finalValidation_response${finalValidationCounter}.json`;
+    console.log("finalStepBodyPath is ", finalStepBodyPath)
     interaction.querySelector(".finalResponseBodyPath").value =
       finalStepBodyPath;
+    document.getElementById("suiteName").addEventListener("input", () => {
+      console.log("triggered to update ")
+      interaction.querySelector(".finalResponseBodyPath").value = `/test-data/${suiteName}/responses/${testCaseName}/${testCaseName}finalValidation_response${finalValidationCounter}.json`
+
+    });
+    document.getElementById("testCaseName").addEventListener("input", (e) => {
+      interaction.querySelector(".finalResponseBodyPath").value = `/test-data/${suiteName}/responses/${testCaseName}/${testCaseName}finalValidation_response${finalValidationCounter}.json`
+    });
+
     finalValidationCounter++;
     const templateClone = document.importNode(
       document.getElementById("dataCreationTemplate").content,

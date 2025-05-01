@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     interactionCounter,
     flowIdCustomField,
     suiteName;
+  let filterMapData = new Map()
   let testCaseName;
   let bodyDetails = [];
   let addOnObj = {
@@ -116,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           interaction.querySelector(".preRequestStepsContainer")
         );
       });
-    
+
     // Add event listeners for input fields
     const inputFields = interaction.querySelectorAll("input, select");
     inputFields.forEach((field) => {
@@ -177,7 +178,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   function configureStepByType(step, type) {
     // Reset all containers first
     const containers = [
-      ".filterKeyContainer",
+      ".filterKeyContainer1",
+      ".filterKeyContainer2",
       ".storeNameId",
       ".customVariableField",
       ".customVariableValue",
@@ -206,9 +208,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     switch (type) {
       case "flowId":
+        let customVar = `${testCaseName}flowId${flowIdCounter}`;
         methodSelect.value = "GET";
         pathInput.value = "/flows";
-        step.querySelector(".filterKeyContainer").classList.remove("hidden");
+        step.querySelector(".filterKeyContainer1").classList.remove("hidden");
         step.querySelector(".customVariableField").classList.remove("hidden");
         step.querySelector(".customVariableValue").classList.remove("hidden");
         step.querySelector(".storeNameId").classList.remove("hidden");
@@ -218,7 +221,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         //step.querySelector(".stepRequestFilterKey").placeholder = "name : Sync Shopify order on-demand to NetSuite (add)"
         step.querySelector(
           ".stepRequestStoreVariable"
-        ).value = `store_${testCaseName}flowId${flowIdCounter}`;
+        ).value = `store_${customVar}`;
+        step.querySelector(".stepRequestFilterKey1").addEventListener("change", () => {
+          filterMapData.set(step.querySelector(".stepRequestFilterKey1").value, customVar)
+          console.log("filterMapData is ", filterMapData);
+        })
+        //filterMapData.set(step.querySelector(".stepRequestFilterKey1").value, customVar)
         step.querySelector(".stepRequestStoreValue").value = "_id";
         flowIdCustomField.push(`store_${testCaseName}flowId${flowIdCounter}`);
         flowIdCounter++;
@@ -227,14 +235,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       case "integrationId":
         methodSelect.value = "GET";
         pathInput.value = "/integrations";
-        step.querySelector(".filterKeyContainer").classList.remove("hidden");
+        step.querySelector(".filterKeyContainer2").classList.remove("hidden");
         step.querySelector(".customVariableField").classList.remove("hidden");
         step.querySelector(".customVariableValue").classList.remove("hidden");
 
         // Set default values
         testCaseName = document.getElementById("testCaseName").value || "C8266";
-        step.querySelector(".stepRequestFilterKey").value =
-          "name : Shopify - NetSuite";
         step.querySelector(
           ".stepRequestStoreVariable"
         ).value = `store_${testCaseName}integrationID`;
@@ -316,7 +322,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       case "flowValidation":
         methodSelect.value = "GET";
         testCaseName = document.getElementById("testCaseName").value || "C8266";
-        pathInput.value = `/flows/{{${testCaseName}flowId1}}/jobs/latest`;
+        step.querySelector(".filterKeyContainer1").classList.remove("hidden");
         step.querySelector(".waitUntilContainer").classList.remove("hidden");
         step.querySelector(".customVariableField").classList.remove("hidden");
         step.querySelector(".customVariableValue").classList.remove("hidden");
@@ -342,6 +348,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           .classList.add("hidden");
 
         // Set default values
+        let fieldID1 = filterMapData.get(step.querySelector(".stepRequestFilterKey1").value)
+        pathInput.value = `/flows/{{${fieldID1}}}/jobs/latest`
+        step.querySelector(".filterKeyContainer1").addEventListener("change", () => {
+          fieldID1 = filterMapData.get(step.querySelector(".stepRequestFilterKey1").value)
+          pathInput.value = `/flows/{{${fieldID1}}}/jobs/latest`
+        })
         step.querySelector(".stepRequestWaitUntil").value = "completed";
         step.querySelector(
           ".stepRequestStoreVariable"
@@ -360,33 +372,40 @@ document.addEventListener("DOMContentLoaded", async () => {
         // flowValidateResponseCounter++;
         attachFlowValidationAddOn(step, type);
         break;
+      case "runFlow":
+        methodSelect.value = "POST";
+        step.querySelector(".filterKeyContainer1").classList.remove("hidden");
+        let fieldID = filterMapData.get(step.querySelector(".stepRequestFilterKey1").value)
+        pathInput.value = `/flows/{{${fieldID}}}/run`
+        step.querySelector(".filterKeyContainer1").addEventListener("change", () => {
+          fieldID = filterMapData.get(step.querySelector(".stepRequestFilterKey1").value)
+          pathInput.value = `/flows/{{${fieldID}}}/run`
+        })
+
+        // Set default values
+        testCaseName = document.getElementById("testCaseName").value || "C8266";
+        step.querySelector(
+          ".stepRequestStoreVariable"
+        ).value = `store_${testCaseName}integrationID`;
+        step.querySelector(".stepRequestStoreValue").value = "_id";
+        break;
 
       case "custom":
       default:
+        step.querySelector(".filterKeyContainer1").classList.remove("hidden");
+        step.querySelector(".filterKeyContainer2").classList.remove("hidden");
         step.querySelector(".waitUntilContainer").classList.remove("hidden");
         step.querySelector(".customVariableField").classList.remove("hidden");
         step.querySelector(".customVariableValue").classList.remove("hidden");
         step.querySelector(".stepResponse").classList.remove("hidden");
-        step
-          .querySelector(".partialValidationContainer")
-          .classList.remove("hidden");
+        step.querySelector(".partialValidationContainer").classList.remove("hidden");
         step.querySelector(".bodyPathContainer").classList.remove("hidden");
         step.querySelector(".payloadContainer").classList.remove("hidden");
-        step
-          .querySelector(".dataCreationMethodContainer")
-          .classList.remove("hidden");
-        step
-          .querySelectorAll(".uniqueValueContainer1")
-          .forEach((e) => e.classList.remove("hidden"));
-        step
-          .querySelectorAll(".uniqueValueContainer2")
-          .forEach((e) => e.classList.remove("hidden"));
-        step
-          .querySelectorAll(".uniqueValueContainer3")
-          .forEach((e) => e.classList.remove("hidden"));
-        step
-          .querySelector(".dataValidationMethodContainer")
-          .classList.remove("hidden");
+        step.querySelector(".dataCreationMethodContainer").classList.remove("hidden");
+        step.querySelectorAll(".uniqueValueContainer1").forEach((e) => e.classList.remove("hidden"));
+        step.querySelectorAll(".uniqueValueContainer2").forEach((e) => e.classList.remove("hidden"));
+        step.querySelectorAll(".uniqueValueContainer3").forEach((e) => e.classList.remove("hidden"));
+        step.querySelector(".dataValidationMethodContainer").classList.remove("hidden");
         // Show basic fields for custom step
         methodSelect.value = "GET";
         pathInput.value = "";
@@ -531,7 +550,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     switch (stepType) {
       case "flowId":
       case "integrationId":
-        const filterKey = stepEl.querySelector(".stepRequestFilterKey").value;
+        const filterKey = stepEl.querySelector(`${stepType == "flowId" ? ".stepRequestFilterKey1" : ".stepRequestFilterKey2"}`).value;
         if (filterKey) {
           request.filterKey = filterKey;
         }
@@ -920,25 +939,41 @@ document.addEventListener("DOMContentLoaded", async () => {
         "numResolved": 0
       }
     ]
-    
+
     addOnContainer.querySelector("#flow-json-preview").textContent =
+      JSON.stringify(jsonBody, null, 2);
+    step.querySelector(".filterKeyContainer1").addEventListener("change", () => {
+      jsonBody = [
+        {
+          "_flowId": `{{${step.querySelector(".stepRequestPath").value.split('{{')[1].split('}}')[0]}}}`,
+          "type": "flow",
+          "status": "completed",
+          "numError": 0,
+          "numSuccess": 1,
+          "numIgnore": 0,
+          "numResolved": 0
+        }
+      ]
+  
+      addOnContainer.querySelector("#flow-json-preview").textContent =
         JSON.stringify(jsonBody, null, 2);
-      addOnContainer
-        .querySelector("#flow-json-preview")
-        .addEventListener("input", () => {
-          payloadObj = {
-            body: addOnContainer.querySelector("#flow-json-preview")
-              .textContent,
-            path: preStepBodyPath,
-          };
-          console.log("payloadObj pre is ", payloadObj);
-        });
-      payloadObj = {
-        body: addOnContainer.querySelector("#flow-json-preview").textContent,
-        path: preStepBodyPath,
-      };
-      console.log("payloadObj pre is ", payloadObj);
-      pushPayloads(payloadObj);
+    })
+    addOnContainer
+      .querySelector("#flow-json-preview")
+      .addEventListener("input", () => {
+        payloadObj = {
+          body: addOnContainer.querySelector("#flow-json-preview")
+            .textContent,
+          path: preStepBodyPath,
+        };
+        console.log("payloadObj pre is ", payloadObj);
+      });
+    payloadObj = {
+      body: addOnContainer.querySelector("#flow-json-preview").textContent,
+      path: preStepBodyPath,
+    };
+    console.log("payloadObj pre is ", payloadObj);
+    pushPayloads(payloadObj);
   }
 
   function filterOptions(options, inputValue) {
@@ -1105,13 +1140,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           pushPayloads(payloadObj)
           console.log("payloadObj is ", payloadObj);
         });
-        if (functionValue !== 'pleaseSelect'){
-          payloadObj = {
-            body: addOnContainer.querySelector("#flow-json-preview").textContent,
-            path: interaction.querySelector(".finalResponseBodyPath").value,
-          };
-          pushPayloads(payloadObj);
-        }
+      if (functionValue !== 'pleaseSelect') {
+        payloadObj = {
+          body: addOnContainer.querySelector("#flow-json-preview").textContent,
+          path: interaction.querySelector(".finalResponseBodyPath").value,
+        };
+        pushPayloads(payloadObj);
+      }
       console.log("payloadObj is ", payloadObj);
       handleReusableOptions(addOnContainer, [...reusableOptions]);
       reusableOptions.push(...details.mapFields);
@@ -1120,11 +1155,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     updateDetails(interaction);
     interaction.querySelector(".finalResponseValidationMethod").addEventListener("change", () => {
-        interaction.querySelectorAll(".uniqueValueContainer1").forEach((e) => e.classList.add("hidden"));
-        interaction.querySelectorAll(".uniqueValueContainer2").forEach((e) => e.classList.add("hidden"));
-        interaction.querySelectorAll(".uniqueValueContainer3").forEach((e) => e.classList.add("hidden"));
-        updateDetails(interaction);
-      });
+      interaction.querySelectorAll(".uniqueValueContainer1").forEach((e) => e.classList.add("hidden"));
+      interaction.querySelectorAll(".uniqueValueContainer2").forEach((e) => e.classList.add("hidden"));
+      interaction.querySelectorAll(".uniqueValueContainer3").forEach((e) => e.classList.add("hidden"));
+      updateDetails(interaction);
+    });
   }
 
   function pushPayloads(payloadObj) {
@@ -1167,7 +1202,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
   }
-  
+
 });
 
 async function getEnvDetails(filePath) {

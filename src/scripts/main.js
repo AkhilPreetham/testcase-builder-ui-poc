@@ -165,6 +165,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function configureStepByType(step, type) {
+    let fieldID1
+    let sName
+    let testT
     // Reset all containers first
     const containers = [
       ".filterKeyContainer1",
@@ -307,7 +310,54 @@ document.addEventListener("DOMContentLoaded", async () => {
         attachDataCreationAddOns(step, type);
 
         break;
+      case "dataValidation":
+        methodSelect.value = "POST";
+        pathInput.value =
+          "/connections/process.env[CONNECTIONS.SHOPIFY_STORE_1]/import";
+        testCaseName = document.getElementById("testCaseName").value || "C8266";
+       
+        step.querySelector(".stepResponse").classList.remove("hidden");
+      
+        step.querySelector(".bodyPathContainer").classList.remove("hidden");
+        step
+          .querySelector(".stepResponse")
+          .querySelector(".uniqueValueContainer1")
+          .classList.add("hidden");
+        step
+          .querySelector(".stepResponse")
+          .querySelector(".uniqueValueContainer2")
+          .classList.add("hidden");
+        step
+          .querySelector(".stepResponse")
+          .querySelector(".uniqueValueContainer3")
+          .classList.add("hidden");
 
+        // Set default values
+        fieldID1 = filterMapData.get(step.querySelector(".stepRequestFilterKey1").value)
+        pathInput.value = `/flows/{{${fieldID1}}}/jobs/latest`
+        step.querySelector(".filterKeyContainer1").addEventListener("change", () => {
+          fieldID1 = filterMapData.get(step.querySelector(".stepRequestFilterKey1").value)
+          pathInput.value = `/flows/{{${fieldID1}}}/jobs/latest`
+        })
+        step.querySelector(".stepRequestWaitUntil").value = "completed";
+        step.querySelector(
+          ".stepRequestStoreVariable"
+        ).value = `store_${testCaseName}jobstatus`;
+        step.querySelector(".stepRequestStoreValue").value = "[0].status";
+        step.querySelector(".stepResponseStatus").value = "200";
+        step.querySelector(".stepResponsePartialValidation").value = "true";
+        sName =
+          document.getElementById("suiteName").value || "Api_Suite1";
+        testT =
+          step.closest(".interaction").querySelector(".testTitle").value ||
+          "OrderImportOrderImport";
+        step.querySelector(
+          ".stepResponseBodyPath"
+        ).value = `/test-data/${sName}/responses/${testCaseName}/${testCaseName}flowValidate_response${flowValidateResponseCounter}.json`;
+        // flowValidateResponseCounter++;
+        attachFlowValidationAddOn(step, type);
+        updateJsonPreview();
+        break;
       case "flowValidation":
         methodSelect.value = "GET";
         testCaseName = document.getElementById("testCaseName").value || "C8266";
@@ -948,7 +998,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       addOnContainer.querySelector("#flow-json-preview").textContent =
         JSON.stringify(jsonBody, null, 2);
-        updateJsonPreview();
+      updateJsonPreview();
     })
     addOnContainer
       .querySelector("#flow-json-preview")
@@ -1088,12 +1138,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   function updateFinalSteps(interaction) {
     let finalStepBodyPath = `/test-data/${suiteName}/responses/${testCaseName}/${testCaseName}finalValidation_response${finalValidationCounter}.json`;
     console.log("finalStepBodyPath is ", finalStepBodyPath)
-    interaction.querySelector(".finalResponseBodyPath").value =
-      finalStepBodyPath;
+    interaction.querySelector(".finalResponseBodyPath").value = finalStepBodyPath;
     document.getElementById("suiteName").addEventListener("input", () => {
       console.log("triggered to update ")
       interaction.querySelector(".finalResponseBodyPath").value = `/test-data/${suiteName}/responses/${testCaseName}/${testCaseName}finalValidation_response${finalValidationCounter}.json`
-
     });
     document.getElementById("testCaseName").addEventListener("input", (e) => {
       interaction.querySelector(".finalResponseBodyPath").value = `/test-data/${suiteName}/responses/${testCaseName}/${testCaseName}finalValidation_response${finalValidationCounter}.json`
@@ -1124,16 +1172,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           `.uniqueValueFinalContainer${index + 1}`
         );
         uniqueValueContainer.classList.remove("hidden");
-        uniqueValueContainer.querySelector(
-          `.finalStepResponseUniqueValue${index + 1}`
-        ).placeholder = details.uniqueValues[key];
+        uniqueValueContainer.querySelector(`.finalStepResponseUniqueValue${index + 1}`).placeholder = details.uniqueValues[key];
       });
       details.json = JSON.stringify(details.json).split("testCaseName").join(`${testCaseName}`);
       addOnContainer.querySelector("#flow-json-preview").textContent =
         JSON.stringify(JSON.parse(details.json), null, 2);
-      addOnContainer
-        .querySelector("#flow-json-preview")
-        .addEventListener("input", () => {
+      addOnContainer.querySelector("#flow-json-preview").addEventListener("input", () => {
           payloadObj = {
             body: addOnContainer.querySelector("#flow-json-preview")
               .textContent,

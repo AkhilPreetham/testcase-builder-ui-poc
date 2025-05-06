@@ -148,6 +148,18 @@
                   <option value="validateSalesOrderWithDiscountItem">validateSalesOrderWithDiscountItem</option>
                   <option value="validateInvoiceWithDiscountItem">validateInvoiceWithDiscountItem</option>
                   <option value="verifyShopifyBillingANDrefund">verifyShopifyBillingANDrefund</option>
+                  <option value="verifyCashsaleDataFromNetsuite">verifyCashsaleDataFromNetsuite</option>
+                  <option value="verifyCashRefundDataFromNetsuite">verifyCashRefundDataFromNetsuite</option>
+                  <option value="verifyShopifyBilling">verifyShopifyBilling</option>
+                  <option value="verifyCustRefundDataFromNetsuite">verifyCustRefundDataFromNetsuite</option>
+                  <option value="validateCreditMemoWithDiscountItem">validateCreditMemoWithDiscountItem</option>
+                  <option value="verifyCustomerDepositDataFromNetsuite">verifyCustomerDepositDataFromNetsuite</option>
+                  <option value="verifyShopifyCustomer">verifyShopifyCustomer</option>
+                  <option value="verifyNSCustomerByInternalID">verifyNSCustomerByInternalID</option>
+                  <option value="verifyShopifyFulfillment">verifyShopifyFulfillment</option>
+                  <option value="validateErrorMessage">validateErrorMessage</option>
+                  <option value="verifyFulfillmentImportDataFromNetsuite">verifyFulfillmentImportDataFromNetsuite
+                  </option>
                 </select>
               </div>
               <div class="mb-2">
@@ -197,8 +209,9 @@
             <option value="integrationId">Get Integration ID</option>
             <option value="updateFlowStatus">Update Flow Status</option>
             <option value="updateSettings">Update Settings</option>
-            <option value="runFlow">Run flow</option>
             <option value="dataCreation">Data Creation</option>
+            <option value="dataValidation">Data Validation</option>
+            <option value="runFlow">Run flow</option>
             <option value="flowValidation">Flow Validation</option>
           </select>
         </div>
@@ -238,10 +251,14 @@
                 NetSuite order (cash sale or sales order)</option>
               <option value="name : NetSuite fulfillment to Shopify fulfillment (add)">name : NetSuite fulfillment to
                 Shopify fulfillment (add)</option>
-              <option value="name : NetSuite sales order to NetSuite invoice (add)">name : NetSuite sales order to NetSuite invoice (add)</option>
-              <option value="name : NetSuite refund to Shopify refund (add)">name : NetSuite refund to Shopify refund (add)</option>
-              <option value="name : NetSuite billing to Shopify billing (add)">name : NetSuite billing to Shopify billing (add)</option>
-              <option value="name : Shopify refund to NetSuite refund (add)">name : Shopify refund to NetSuite refund (add)</option>
+              <option value="name : NetSuite sales order to NetSuite invoice (add)">name : NetSuite sales order to
+                NetSuite invoice (add)</option>
+              <option value="name : NetSuite refund to Shopify refund (add)">name : NetSuite refund to Shopify refund
+                (add)</option>
+              <option value="name : NetSuite billing to Shopify billing (add)">name : NetSuite billing to Shopify
+                billing (add)</option>
+              <option value="name : Shopify refund to NetSuite refund (add)">name : Shopify refund to NetSuite refund
+                (add)</option>
             </select>
           </div>
           <div class="mb-2 filterKeyContainer2">
@@ -296,6 +313,16 @@
               <option value="createShopifyStoreFrontOrder">createShopifyStoreFrontOrder</option>
               <option value="createCreditMemo">createCreditMemo</option>
               <option value="createNScustomercreditmemoRefund">createNScustomercreditmemoRefund</option>
+              <option value="createFulfillment">createFulfillment</option>
+              <option value="refundSHPFOrderthruAPI">refundSHPFOrderthruAPI</option>
+              <option value="createNScustomerPayment">createNScustomerPayment</option>
+              <option value="createNSCustomer">createNSCustomer</option>
+              <option value="getShopifyCustomerDefaultAddressId">getShopifyCustomerDefaultAddressId</option>
+              <option value="createSHPFCustomer">createSHPFCustomer</option>
+              <option value="updateSHPFCustomerAddress">updateSHPFCustomerAddress</option>
+              <option value="createItem">createItem</option>
+              <option value="adjustNSInventory">adjustNSInventory</option>
+
             </select>
           </div>
           <div class="mb-2 uniqueValueContainer1 hidden">
@@ -348,6 +375,17 @@
               <option value="createSHPFDraftOrderthoughAPI">validateSalesOrderWithDiscountItem</option>
               <option value="createProduct">validateInvoiceWithDiscountItem</option>
               <option value="createShipmentforSHPFOrder">verifyShopifyBillingANDrefund</option>
+              <option value="verifyCashsaleDataFromNetsuite">verifyCashsaleDataFromNetsuite</option>
+              <option value="verifyCashRefundDataFromNetsuite">verifyCashRefundDataFromNetsuite</option>
+              <option value="verifyShopifyBilling">verifyShopifyBilling</option>
+              <option value="verifyCustRefundDataFromNetsuite">verifyCustRefundDataFromNetsuite</option>
+              <option value="validateCreditMemoWithDiscountItem">validateCreditMemoWithDiscountItem</option>
+              <option value="verifyCustomerDepositDataFromNetsuite">verifyCustomerDepositDataFromNetsuite</option>
+              <option value="verifyShopifyCustomer">verifyShopifyCustomer</option>
+              <option value="verifyNSCustomerByInternalID">verifyNSCustomerByInternalID</option>
+              <option value="verifyShopifyFulfillment">verifyShopifyFulfillment</option>
+              <option value="validateErrorMessage">validateErrorMessage</option>
+              <option value="verifyFulfillmentImportDataFromNetsuite">verifyFulfillmentImportDataFromNetsuite</option>
             </select>
           </div>
           <div class="mb-2 bodyPathContainer">
@@ -405,7 +443,8 @@
                     <label class="flex items-center">
                       <input type="checkbox"
                         class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Sync Shopify order on-demand to NetSuite (add)</span>
+                      <span class="text-sm font-medium text-gray-700">Sync Shopify order on-demand to NetSuite
+                        (add)</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
                       <input type="checkbox" class="flow-toggle sr-only peer">
@@ -420,7 +459,8 @@
                     <label class="flex items-center">
                       <input type="checkbox"
                         class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Shopify order to NetSuite order (cash sale or sales order)</span>
+                      <span class="text-sm font-medium text-gray-700">Shopify order to NetSuite order (cash sale or
+                        sales order)</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
                       <input type="checkbox" class="flow-toggle sr-only peer">
@@ -435,7 +475,8 @@
                     <label class="flex items-center">
                       <input type="checkbox"
                         class="flow-checkbox mr-2 h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
-                      <span class="text-sm font-medium text-gray-700">Shopify customer to NetSuite customer (add or update)</span>
+                      <span class="text-sm font-medium text-gray-700">Shopify customer to NetSuite customer (add or
+                        update)</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
                       <input type="checkbox" class="flow-toggle sr-only peer">
@@ -473,9 +514,12 @@
               <label class="block text-sm font-medium text-gray-700 mb-2">Sync sales tax to NetSuite as *</label>
               <select id="tax-option"
                 class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="Add total tax against a single line item on the order">Add total tax against a single line item on the order</option>
-                <option value="NetSuite calculate taxes using its own tax engine">NetSuite calculate taxes using its own tax engine</option>
-                <option value="Overwrite taxes with Shopify tax amounts">Overwrite taxes with Shopify tax amounts</option>
+                <option value="Add total tax against a single line item on the order">Add total tax against a single
+                  line item on the order</option>
+                <option value="NetSuite calculate taxes using its own tax engine">NetSuite calculate taxes using its own
+                  tax engine</option>
+                <option value="Overwrite taxes with Shopify tax amounts">Overwrite taxes with Shopify tax amounts
+                </option>
               </select>
             </div>
 
@@ -488,7 +532,8 @@
             </div>
 
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Default tax code or group when no match is found in NetSuite</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Default tax code or group when no match is
+                found in NetSuite</label>
               <input type="text" id="default-tax-code"
                 class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter default tax code">
@@ -548,7 +593,8 @@
 
                 <!-- Mapped Fields Input -->
                 <div class="relative w-full">
-                  <label for="mapped-fields-input" class="block text-sm font-medium text-gray-700 mb-1">Dynamic Fields that are being mapped</label>
+                  <label for="mapped-fields-input" class="block text-sm font-medium text-gray-700 mb-1">Dynamic Fields
+                    that are being mapped</label>
                   <div class="relative">
                     <input id="mapped-fields-input" type="text" placeholder="Search mapped fields..."
                       class="pl-10 w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
